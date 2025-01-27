@@ -1,0 +1,22 @@
+{
+  "name": "api",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "test": "tsx --test \"./src/**/*.test.ts\"",
+    "build": "esbuild --bundle src/index.ts --outfile=dist/index.cjs --minify --platform=node"
+  },
+  "type": "module",
+  "dependencies": {
+    "@hono/node-server": "^1.12.2",
+    "@hono/swagger-ui": "^0.4.1",
+    "@hono/zod-openapi": "^0.16.0",
+    "hono": "^4.5.9",
+    "nanoid": "^5.0.7"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.17",
+    "prettier": "^3.3.3",
+    "tsx": "^4.7.1",
+    "typescript": "^5.5.4"
+  }
+}
