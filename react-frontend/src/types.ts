@@ -4,3 +4,8 @@ export type Slot = {
     isBooked?: string;
     bookedCustomerName?: string;
 }
+
+export type Flag = {
+    content: string,
+    severity: any
+}

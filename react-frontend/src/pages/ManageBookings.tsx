@@ -1,60 +1,71 @@
 import React, { useEffect, useState } from 'react';
 
+import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
 
 import { filterBookedSlots, formatDate, formatTime } from './utils';
-import { getSlots } from '../services/slot';
+import { getSlots, cancelSlot } from '../services/slot';
 
-import { Slot } from '../types';
+import { Slot, Flag } from '../types';
+import { Alerts } from '../components/Alerts';
+import { ALERTS } from '../constants';
 
 function ManageBookings() {
   const [filteredSlots, setFilteredSlots] = useState<Slot[]>([])
-  const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null)
-  const [error, setError] = useState('')
+  const [alert, setAlert] = useState<Flag>();
+
+  const fetchSlots = async () => {
+    const res = await getSlots();
+    const bookedSlots = filterBookedSlots(res.data)
+    setFilteredSlots(bookedSlots)
+  }
 
   useEffect(() => {
-    const fetchSlots = async () => {
-      const res = await getSlots();
-      const bookedSlots = filterBookedSlots(res.data)
-      setFilteredSlots(bookedSlots)
-    }
-
     fetchSlots()
   }, [])
 
-  useEffect(() => {
-    if (!filteredSlots.length) {
-      setError('No booked slots')
-    } else {
-      setError('')
+  const handleCancel = async (id: string) => {
+    try {
+      const res = await cancelSlot(id)
+
+      if (res.success) {
+        setAlert(ALERTS.cancel_success)
+        fetchSlots()
+      } else {
+        setAlert(ALERTS.cancel_error)
+      }
+    } catch {
+      setAlert(ALERTS.cancel_error)
     }
-  }, [filteredSlots])
+    
+  }
 
   return (
     <div>
-      <h1>
-        Booking
-      </h1>
+      <h1>Booking</h1>
+      <Alerts alert={alert} onClose={() => setAlert(undefined)}/>
 
-        <div>
-          <div>Booked slots</div>
-      {error || (        
+      <div>
+        <div>{(filteredSlots.length) ? 'Booked slots' : 'No booked slots'}</div>
+        {!!(filteredSlots.length) && (
           <table>
-              <tr>
-    <th>Date</th>
-    <th></th>
-    <th>Name</th>
-    <th></th>
-  </tr>
+            <tr>
+              <th>Date</th>
+              <th></th>
+              <th>Name</th>
+              <th></th>
+            </tr>
             {filteredSlots.map(slot => <tr>
               <td>{formatDate(slot.startDate)}</td>
               <td>{formatTime(slot.startDate)}</td>
               <td>{slot.bookedCustomerName}</td>
-              <td></td>
+              <td><IconButton onClick={() => handleCancel(slot.id)}>
+                <CloseIcon />
+              </IconButton></td>
             </tr>)}
           </table>
-      )}
-        </div>
+        )}
+      </div>
     </div>
   )
 }

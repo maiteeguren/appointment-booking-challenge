@@ -1,17 +1,16 @@
-import React, {useState} from 'react';
-import { useNavigate } from "react-router";
+import React, { useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
-import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import { formatTime, formatDate } from '../pages/utils';
-import { bookSlot } from '../services/slot';
 
-import { Slot } from '../types';
+import { Slot, Flag } from '../types';
+
+import { Section, SectionTitle, InputWrapper, ButtonGroup } from './styled';
 
 const style = {
   position: 'absolute',
@@ -25,29 +24,24 @@ const style = {
   p: 4,
 };
 
-export default function BookingModal({ slot, open, onClose }: { slot: Slot, open: boolean, onClose: () => void}) {
-  const [loading, setLoading] = useState(false)
+type Props = {
+  slot: Slot | null;
+  open: boolean;
+  onClose: () => void;
+  onBookSlot: (id: string, name: string) => void;
+  loading: boolean,
+}
+
+export default function SlotConfirmation({ slot, open, onClose, onBookSlot, loading }: Props) {
   const [name, setName] = useState('')
-  const navigate = useNavigate()
 
   /**
    * Edge cases:
    * 1. no name input
    */
 
-  const handleBook = async () => {
-    setLoading(true)
-    const res = await bookSlot(slot.id, name);
-    setLoading(false)
-    onClose()
-
-    if (res.data.isBooked) {
-      navigate(`${slot.id}/confirmation`)
-    }
-  }
-
   return (
-    <div>
+    slot && (
       <Modal
         open={open}
         onClose={onClose}
@@ -58,8 +52,9 @@ export default function BookingModal({ slot, open, onClose }: { slot: Slot, open
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Book this slot?
           </Typography>
-            <div>
-              Your name:
+          <Section>
+            <InputWrapper>
+              <SectionTitle>Your name: </SectionTitle>
               <Box
                 component="form"
                 sx={{ '& > :not(style)': { m: 1, width: '25ch' } }}
@@ -67,18 +62,23 @@ export default function BookingModal({ slot, open, onClose }: { slot: Slot, open
                 autoComplete="off"
               >
                 <TextField id="standard-basic" variant="standard" onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-    setName(event.target.value)}}/>
+                  setName(event.target.value)
+                }} />
               </Box>
-            </div>
-            <div>Date: {formatDate(slot?.startDate)}</div>
-            <div>Time: {formatTime(slot?.startDate)}</div>
-            <div>Duration: 30 minutes</div>    
-            <Stack spacing={2} direction="row">
-              <Button variant="text" onClick={onClose}>Cancel</Button>
-              <Button variant="contained" onClick={handleBook} loading={loading}>Book</Button>
-            </Stack>      
+            </InputWrapper>
+            <div><SectionTitle>Date: </SectionTitle>
+              {formatDate(slot?.startDate)}</div>
+            <div><SectionTitle>Time: </SectionTitle>
+              {formatTime(slot?.startDate)}</div>
+            <div><SectionTitle>Duration: </SectionTitle>
+              30 minutes</div>
+          </Section>
+          <ButtonGroup>
+            <Button variant="text" onClick={onClose}>Cancel</Button>
+            <Button variant="contained" onClick={() => onBookSlot(slot.id, name)} loading={loading}>Book</Button>
+          </ButtonGroup>
         </Box>
       </Modal>
-    </div>
+    )
   );
 }
