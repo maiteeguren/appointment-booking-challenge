@@ -31,6 +31,7 @@ export const useAvailableSlots = (date: any) => {
 
             if (!availableSlots.length) {
                 setError('No slots available for the selected date')
+                setFilteredSlots([])
             } else {
                 setFilteredSlots(availableSlots)
                 setError('')

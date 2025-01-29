@@ -30,12 +30,10 @@ function NewBooking() {
   return (
     <BookingWrapper>
       <h1>Booking</h1>
-      <Alerts alert={alert} onClose={() => setAlert(undefined)}/>
-      {selectedSlot?.isBooked ? (
-        <SlotDetails slot={selectedSlot} onAlert={setAlert} onBack={() => setSelectedSlot(null)}/>
-      ) : (
-          <SlotSelection date={date} onChangeDate={(date) => setDate(date)} availableSlots={availableSlots} onSelectSlot={handleSelectSlot} />
-      )}
+      <Alerts alert={alert} onClose={() => setAlert(undefined)} />
+      {selectedSlot?.isBooked
+        ? <SlotDetails slot={selectedSlot} onAlert={setAlert} onBack={() => setSelectedSlot(null)} />
+        : <SlotSelection date={date} onChangeDate={(date) => setDate(date)} availableSlots={availableSlots} onSelectSlot={handleSelectSlot} />}
       <SlotConfirmationModal slot={selectedSlot} open={isModalOpen} onClose={onCloseModal} onBookSlot={onBookSlot} loading={loading} />
     </BookingWrapper>
   )

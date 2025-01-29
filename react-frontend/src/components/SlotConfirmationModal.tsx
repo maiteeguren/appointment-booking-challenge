@@ -57,7 +57,7 @@ export default function SlotConfirmation({ slot, open, onClose, onBookSlot, load
               >
                 <TextField id="standard-basic" variant="standard" onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   setName(event.target.value)
-                }} />
+                }} label='Your name'/>
               </Box>
             </InputWrapper>
             <SlotDescription startDate={slot.startDate} />

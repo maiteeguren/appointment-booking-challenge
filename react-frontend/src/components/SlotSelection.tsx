@@ -23,7 +23,7 @@ export default function SlotSelection({ date, onChangeDate, availableSlots, onSe
       <DateWrapper>
         <SectionTitle>Date</SectionTitle>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker value={date} onChange={(newValue: any) => onChangeDate(newValue)} />
+          <DatePicker value={date} onChange={(newValue: any) => onChangeDate(newValue)} label='Select date'/>
         </LocalizationProvider>
       </DateWrapper>
       <Section>
@@ -31,7 +31,7 @@ export default function SlotSelection({ date, onChangeDate, availableSlots, onSe
         {date ? (availableSlots.length ? (
           <SlotWrapper>
             {availableSlots.map(slot => <ButtonWrapper key={slot.id}>
-              <Button variant="outlined" onClick={() => onSelectSlot(slot)}>{formatTime(slot.startDate)}</Button>
+              <Button variant="outlined" onClick={() => onSelectSlot(slot)} test-id='available-slot'>{formatTime(slot.startDate)}</Button>
             </ButtonWrapper>)}
           </SlotWrapper>
         ) : 'No slots available for the selected date')
