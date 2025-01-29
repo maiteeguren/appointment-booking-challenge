@@ -6,9 +6,8 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import { formatTime, formatDate } from '../pages/utils';
-
-import { Slot, Flag } from '../types';
+import SlotDescription from './SlotDescription';
+import { Slot } from '../types';
 
 import { Section, SectionTitle, InputWrapper, ButtonGroup } from './styled';
 
@@ -19,8 +18,8 @@ const style = {
   transform: 'translate(-50%, -50%)',
   width: 400,
   bgcolor: 'background.paper',
-  border: '1px solid #000',
-  boxShadow: 4,
+  boxShadow: '0px 2px 4px -1px rgba(0,0,0,0.2)',
+  borderRadius: '5px',
   p: 4,
 };
 
@@ -34,11 +33,6 @@ type Props = {
 
 export default function SlotConfirmation({ slot, open, onClose, onBookSlot, loading }: Props) {
   const [name, setName] = useState('')
-
-  /**
-   * Edge cases:
-   * 1. no name input
-   */
 
   return (
     slot && (
@@ -66,16 +60,11 @@ export default function SlotConfirmation({ slot, open, onClose, onBookSlot, load
                 }} />
               </Box>
             </InputWrapper>
-            <div><SectionTitle>Date: </SectionTitle>
-              {formatDate(slot?.startDate)}</div>
-            <div><SectionTitle>Time: </SectionTitle>
-              {formatTime(slot?.startDate)}</div>
-            <div><SectionTitle>Duration: </SectionTitle>
-              30 minutes</div>
+            <SlotDescription startDate={slot.startDate} />
           </Section>
           <ButtonGroup>
             <Button variant="text" onClick={onClose}>Cancel</Button>
-            <Button variant="contained" onClick={() => onBookSlot(slot.id, name)} loading={loading}>Book</Button>
+            <Button variant="contained" onClick={() => onBookSlot(slot.id, name)} loading={loading} disabled={!name.length}>Book</Button>
           </ButtonGroup>
         </Box>
       </Modal>

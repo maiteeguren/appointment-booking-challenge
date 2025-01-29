@@ -9,6 +9,8 @@ import { getSlots, cancelSlot } from '../services/slot';
 import { Slot, Flag } from '../types';
 import { Alerts } from '../components/Alerts';
 import { ALERTS } from '../constants';
+import { BookingWrapper, Table, TableHeader } from './styled';
+import { Section } from '../components/styled';
 
 function ManageBookings() {
   const [filteredSlots, setFilteredSlots] = useState<Slot[]>([])
@@ -41,32 +43,34 @@ function ManageBookings() {
   }
 
   return (
-    <div>
+    <BookingWrapper>
       <h1>Booking</h1>
       <Alerts alert={alert} onClose={() => setAlert(undefined)}/>
 
       <div>
-        <div>{(filteredSlots.length) ? 'Booked slots' : 'No booked slots'}</div>
+        <Section>
+          {(filteredSlots.length) ? 'Booked slots' : 'No booked slots'}
+        </Section>
         {!!(filteredSlots.length) && (
-          <table>
-            <tr>
+          <Table>
+            <TableHeader>
               <th>Date</th>
               <th></th>
               <th>Name</th>
               <th></th>
-            </tr>
+            </TableHeader>
             {filteredSlots.map(slot => <tr>
               <td>{formatDate(slot.startDate)}</td>
               <td>{formatTime(slot.startDate)}</td>
               <td>{slot.bookedCustomerName}</td>
-              <td><IconButton onClick={() => handleCancel(slot.id)}>
-                <CloseIcon />
+              <td><IconButton onClick={() => handleCancel(slot.id)} size="small" aria-label="cancel">
+                <CloseIcon fontSize="small"/>
               </IconButton></td>
             </tr>)}
-          </table>
+          </Table>
         )}
       </div>
-    </div>
+    </BookingWrapper>
   )
 }
 

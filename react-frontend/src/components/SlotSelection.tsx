@@ -28,15 +28,14 @@ export default function SlotSelection({ date, onChangeDate, availableSlots, onSe
       </DateWrapper>
       <Section>
         <SectionTitle>Pick a slot</SectionTitle>
-        {date ? (
+        {date ? (availableSlots.length ? (
           <SlotWrapper>
             {availableSlots.map(slot => <ButtonWrapper key={slot.id}>
               <Button variant="outlined" onClick={() => onSelectSlot(slot)}>{formatTime(slot.startDate)}</Button>
             </ButtonWrapper>)}
           </SlotWrapper>
-        ) : (
-          'Select a date to see available slots'
-        )}
+        ) : 'No slots available for the selected date')
+          : 'Select a date to see available slots'}
       </Section>
     </>
   );

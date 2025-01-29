@@ -16,7 +16,8 @@ export const Section = styled('div')({
 })
 
 export const SectionTitle = styled('span')({
-    fontWeight: 600
+    fontWeight: 600,
+    marginRight: 5,
 })
 
 export const DateWrapper = styled(Section)({
@@ -34,4 +35,16 @@ export const InputWrapper = styled('div')({
 export const ButtonGroup = styled('div')({
     display: 'flex',
     justifyContent: 'space-evenly'
+});
+
+export const AlertsWrapper = styled('div')({
+    position: 'absolute',
+    top: 20,
+    right: 20
+})
+
+export const BackButtonWrapper = styled('div')({
+    display: 'flex',
+    justifyContent: 'center',
+    paddingTop: '3rem'
 });
