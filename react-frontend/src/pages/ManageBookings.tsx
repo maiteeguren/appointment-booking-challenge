@@ -53,20 +53,24 @@ function ManageBookings() {
         </Section>
         {!!(filteredSlots.length) && (
           <Table>
-            <TableHeader>
-              <th>Date</th>
-              <th></th>
-              <th>Name</th>
-              <th></th>
-            </TableHeader>
-            {filteredSlots.map(slot => <tr>
-              <td>{formatDate(slot.startDate)}</td>
-              <td>{formatTime(slot.startDate)}</td>
-              <td>{slot.bookedCustomerName}</td>
-              <td><IconButton onClick={() => handleCancel(slot.id)} size="small" aria-label="cancel">
-                <CloseIcon fontSize="small"/>
-              </IconButton></td>
-            </tr>)}
+            <thead>
+              <TableHeader>
+                <th>Date</th>
+                <th></th>
+                <th>Name</th>
+                <th></th>
+              </TableHeader>
+            </thead>
+            <tbody>
+              {filteredSlots.map(slot => <tr data-testid='appointment-row' key={slot.id}>
+                <td>{formatDate(slot.startDate)}</td>
+                <td>{formatTime(slot.startDate)}</td>
+                <td>{slot.bookedCustomerName}</td>
+                <td><IconButton onClick={() => handleCancel(slot.id)} size="small" aria-label="Cancel booking" data-testid='cancel-booking'>
+                  <CloseIcon fontSize="small" />
+                </IconButton></td>
+              </tr>)}
+            </tbody>
           </Table>
         )}
       </div>

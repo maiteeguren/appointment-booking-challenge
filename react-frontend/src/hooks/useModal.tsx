@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { bookSlot } from '../services/slot';
 import { Flag, Slot } from '../types';
 import { ALERTS } from '../constants';

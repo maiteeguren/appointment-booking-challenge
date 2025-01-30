@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import SlotDescription from './SlotDescription';
 import { Slot } from '../types';
 
-import { Section, SectionTitle, InputWrapper, ButtonGroup } from './styled';
+import { Section, InputWrapper, ButtonGroup } from './styled';
 
 const style = {
   position: 'absolute',
@@ -41,6 +41,7 @@ export default function SlotConfirmation({ slot, open, onClose, onBookSlot, load
         onClose={onClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
+        data-testid='confirmation-modal'
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
@@ -48,23 +49,22 @@ export default function SlotConfirmation({ slot, open, onClose, onBookSlot, load
           </Typography>
           <Section>
             <InputWrapper>
-              <SectionTitle>Your name: </SectionTitle>
               <Box
                 component="form"
-                sx={{ '& > :not(style)': { m: 1, width: '25ch' } }}
+                sx={{ '& > :not(style)': { m: 1, width: '25ch', margin: 0 } }}
                 noValidate
                 autoComplete="off"
               >
-                <TextField id="standard-basic" variant="standard" onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                <TextField id="name-input" variant="standard" onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   setName(event.target.value)
-                }} label='Your name'/>
+                }} label='Your name' />
               </Box>
             </InputWrapper>
-            <SlotDescription startDate={slot.startDate} />
           </Section>
+          <SlotDescription startDate={slot.startDate} />
           <ButtonGroup>
             <Button variant="text" onClick={onClose}>Cancel</Button>
-            <Button variant="contained" onClick={() => onBookSlot(slot.id, name)} loading={loading} disabled={!name.length}>Book</Button>
+            <Button variant="contained" onClick={() => onBookSlot(slot.id, name)} loading={loading} disabled={!name.length} data-testid='book-slot-button'>Book</Button>
           </ButtonGroup>
         </Box>
       </Modal>

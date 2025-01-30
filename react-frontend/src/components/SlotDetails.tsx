@@ -44,9 +44,7 @@ export default function SlotConfirmation({ slot, onAlert, onBack }: Props) {
         <br />
         Your booked slot
       </Section>
-      <Section>
-        <SlotDescription startDate={slot.startDate} />
-      </Section>
+      <SlotDescription startDate={slot.startDate} />
       <ButtonGroup>
         <Button variant="text" onClick={handleCancel} loading={loading}>Cancel booking</Button>
         <Button variant="contained" onClick={() => {}}>Join your call</Button>

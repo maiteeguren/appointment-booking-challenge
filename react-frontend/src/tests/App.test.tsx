@@ -1,11 +1,15 @@
 import React, { act } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, test, expect, vi} from 'vitest';
 import App from '../App';
 import { mockFetch } from './mocks';
 
-describe('renders the expected elements', () => {
-  beforeAll(() => jest.spyOn(window, 'fetch'))
-  beforeEach(() => (window.fetch as jest.Mock).mockImplementation(mockFetch))
+
+describe('Customer screen', () => {
+  // Mock fetch
+  beforeEach(() => {
+    global.fetch = vi.fn(mockFetch);
+  })
 
   test('displays a message when date is not provided', async () => {
     await act(async () => render(<App />));
@@ -16,53 +20,77 @@ describe('renders the expected elements', () => {
   test('displays a message when no slots are available', async () => {
     await act(async () => render(<App />));
 
-    const dateInputElement = await screen.findByText(/select date/i);
-    fireEvent.change(dateInputElement, { target: { value: '08012025' } })
-    const message = screen.getByText(/No slots available for the selected date/i);
+    const dateInputElement = await screen.findByPlaceholderText('MM/DD/YYYY');
+    await fireEvent.change(dateInputElement, { target: { value: '08/01/2025' } })
+
+    const message = await screen.findByText(/No slots available for the selected date/i);
     expect(message).toBeInTheDocument();
   });
 
   test('lists slots on valid date selection', async () => {
     await act(async () => render(<App />));
     
-    const dateInputElement = await screen.findByText(/select date/i);
-    fireEvent.change(dateInputElement, { target: { value: '08012024' } })
-    const availableSlots = await screen.findAllByTestId('available-slot');
+    const dateInputElement = await screen.findByPlaceholderText('MM/DD/YYYY');
+    await fireEvent.change(dateInputElement, { target: { value: '08/01/2024' } })
 
-    expect(length).toBe(1);
+    const availableSlots = await screen.findAllByTestId('available-slot');
+    expect(availableSlots.length).toBe(2);
   });
 
-  // test('lists all activities on initial load', async () => {
-  //   await act(async () => render(<App />));
-  //   const titleElement = screen.getByText(/all activities/i);
-  //   const activityCards = await screen.findAllByTestId(/activity-card/i);
+  test('allows user to make a new booking', async () => {
+    await act(async () => render(<App />));
+    
+    const dateInputElement = await screen.findByPlaceholderText('MM/DD/YYYY');
+    await fireEvent.change(dateInputElement, { target: { value: '08/01/2024' } })
 
-  //   expect(titleElement).toBeInTheDocument();
-  //   expect(activityCards.length).toBe(2);
-  // });
+    const availableSlot = await screen.findByText('13:00');
+    fireEvent.click(availableSlot)
 
-  // test('searches activities by title', async () => {
-  //   await act(async () => render(<App />));
+    const confirmationModal = await screen.findByTestId('confirmation-modal');
+    const nameInput = await screen.findByLabelText(/your name/i);
+    const bookSlotButton = await screen.findByTestId('book-slot-button');
 
-  //   const inputElement = screen.getByTestId('search-input-field');
-  //   fireEvent.change(inputElement, { target: { value: 'museum' } })
-  //   const searchTitleElement = await screen.findByText(/search results for/i);
-  //   const activityCards = await screen.findAllByTestId(/activity-card/i);
+    expect(confirmationModal).toBeInTheDocument();
+    expect(bookSlotButton).toBeDisabled();
 
-  //   expect(searchTitleElement).toBeInTheDocument();
-  //   expect(activityCards.length).toBe(1);
-  // });
+    await fireEvent.change(nameInput, { target: { value: 'test' } })
+    expect(bookSlotButton).toBeEnabled();
+  });
 
-  // test('displays an error when search result is empty', async () => {
-  //   await act(async () => render(<App />));
+  test('allows user to view the details of a booking', async () => {
+    await act(async () => render(<App />));
+    
+    const dateInputElement = await screen.findByPlaceholderText('MM/DD/YYYY');
+    await fireEvent.change(dateInputElement, { target: { value: '08/01/2024' } })
 
-  //   const inputElement = screen.getByTestId('search-input-field');
+    const availableSlot = await screen.findByText('12:00');
+    fireEvent.click(availableSlot)
 
-  //   fireEvent.change(inputElement, { target: { value: 'test' } })
-  //   const searchTitleElement = await screen.findByText(/search results for/i);
-  //   const emptyResult = await screen.findByText(/no results match your search criteria/i);
+    const helloMessage = await screen.findByText(/Hello John Smith!/i);
+    const cancelButton = await screen.findByText(/Cancel booking/i);
+    const joinButton = await screen.findByText(/Join your call/i);
 
-  //   expect(searchTitleElement).toBeInTheDocument();
-  //   expect(emptyResult).toBeInTheDocument();
-  // });
+    expect(helloMessage).toBeInTheDocument();
+    expect(cancelButton).toBeEnabled();
+    expect(joinButton).toBeEnabled();
+  });
 })
+describe('Manager screen', () => {
+  // Mock fetch
+  beforeEach(() => {
+    global.fetch = vi.fn(mockFetch);
+  })
+
+  test('displays aall available appointments', async () => {
+    await act(async () => render(<App />));
+
+    const manageAppointments = await screen.findByText(/Manage appointments/i);
+    await fireEvent.click(manageAppointments)
+
+    const appointmentRows = await screen.findAllByTestId('appointment-row');
+    const cancelButton = await screen.findByTestId('cancel-booking');
+
+    expect(appointmentRows.length).toBe(1);
+    expect(cancelButton).toBeEnabled();
+  });
+});

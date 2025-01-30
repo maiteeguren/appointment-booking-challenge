@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Dayjs } from 'dayjs';
+
 import { Slot } from '../types';
 import { getSlots } from '../services/slot';
 import { filterSlotByDate } from '../pages/utils';
 
-export const useAvailableSlots = (date: any) => {
+export const useAvailableSlots = (date: Dayjs) => {
     const [slots, setSlots] = useState<Slot[]>([])
     const [filteredSlots, setFilteredSlots] = useState<Slot[]>([])
     const [error, setError] = useState('')
@@ -37,7 +39,7 @@ export const useAvailableSlots = (date: any) => {
                 setError('')
             }
         }
-    }, [date])
+    }, [date, slots])
 
     return {
         availableSlots: filteredSlots, error

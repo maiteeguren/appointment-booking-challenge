@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Dayjs } from 'dayjs';
 
 import { useAvailableSlots } from '../hooks/useAvailableSlots';
 import { useModal } from '../hooks/useModal';
@@ -13,7 +14,7 @@ import { Slot, Flag } from '../types';
 import { BookingWrapper } from './styled';
 
 function NewBooking() {
-  const [date, setDate] = useState(null)
+  const [date, setDate] = useState<Dayjs | null>(null)
   const [selectedSlot, setSelectedSlot] = useState<Slot | null>(null)
   const { availableSlots } = useAvailableSlots(date)
   const [alert, setAlert] = useState<Flag>();

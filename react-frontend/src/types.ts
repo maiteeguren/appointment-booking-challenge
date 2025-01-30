@@ -1,11 +1,13 @@
+import { Dayjs } from "dayjs";
+
 export type Slot = {
     id: string;
-    startDate: string;
+    startDate: Dayjs;
     isBooked?: string;
     bookedCustomerName?: string;
 }
 
 export type Flag = {
     content: string,
-    severity: any
+    severity: string
 }

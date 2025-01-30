@@ -1,7 +1,7 @@
 import { Slot } from "../types"
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
-export const filterSlotByDate = (slots: Slot[], selectedDate: any) => {
+export const filterSlotByDate = (slots: Slot[], selectedDate: Dayjs) => {
     const formatedSelectedDate = formatDate(selectedDate)
 
     return slots.filter(slot => formatDate(slot.startDate) === formatedSelectedDate)
