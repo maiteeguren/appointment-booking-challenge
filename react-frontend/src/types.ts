@@ -1,4 +1,5 @@
 import { Dayjs } from "dayjs";
+import { AlertProps } from '@mui/material/Alert';
 
 export type Slot = {
     id: string;
@@ -9,5 +10,5 @@ export type Slot = {
 
 export type Flag = {
     content: string,
-    severity: string
+    severity: AlertProps['severity']
 }

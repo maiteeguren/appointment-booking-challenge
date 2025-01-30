@@ -5,7 +5,7 @@ import { Slot } from '../types';
 import { getSlots } from '../services/slot';
 import { filterSlotByDate } from '../pages/utils';
 
-export const useAvailableSlots = (date: Dayjs) => {
+export const useAvailableSlots = (date: Dayjs | null) => {
     const [slots, setSlots] = useState<Slot[]>([])
     const [filteredSlots, setFilteredSlots] = useState<Slot[]>([])
     const [error, setError] = useState('')

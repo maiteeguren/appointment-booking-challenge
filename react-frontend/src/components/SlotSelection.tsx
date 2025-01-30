@@ -13,7 +13,7 @@ import { Dayjs } from 'dayjs';
 
 type Props = {
   availableSlots: Slot[],
-  date: Dayjs,
+  date: Dayjs | null,
   onChangeDate: (date: Dayjs | null) => void,
   onSelectSlot: (slot: Slot) => void,
 }
