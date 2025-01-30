@@ -8,12 +8,12 @@ function App() {
     <>
       <BrowserRouter>
         <nav>
-          <Link to="/new">Book an appointment</Link>
+          <Link to="/">Book an appointment</Link>
           <Link to="/manage">Manage appointments</Link>
         </nav>
         <div className="content">
           <Routes>
-            <Route path="/new" element={<SelectSlot />} />
+            <Route path="/" element={<SelectSlot />} />
             <Route path="/manage" element={<ManageBookings />} />
           </Routes>
         </div>
